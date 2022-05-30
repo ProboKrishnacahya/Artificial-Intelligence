@@ -23,8 +23,12 @@ lr = LinearRegression()
 lr.fit(X_train, y_train)
 
 lr.coef_
+print("Coefficient ENGINESIZE: ", lr.coef_[0])
+print("Coefficient CYLINDERS: ", lr.coef_[1])
+print("Coefficient FUELCONSUMPTION_COMB: ", lr.coef_[2])
 
 lr.intercept_
+print(f'Intercept: {lr.intercept_}')
 
 """y = x1.b1 + x2.b2 + x3.b3 + b0"""
 
@@ -52,8 +56,6 @@ testPred = lr.predict(X_test)
 mseValue = mean_squared_error(y_test, testPred)
 mseValue
 print(f'MSE value on test set: {mseValue}')
-
-"""Calculate the predicted emission when ENGINESIZE = 2, CYLINDERS = 5, and FUELCONSUMTION_COMB = 3 (10 points)"""
 
 pred = 2 * lr.coef_[0] + 5 * lr.coef_[1] + 3 * lr.coef_[2] + lr.intercept_
 

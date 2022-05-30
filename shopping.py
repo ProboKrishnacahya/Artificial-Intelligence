@@ -1,5 +1,15 @@
 # -*- coding: utf-8 -*-
 """
+#Nomor 8
+
+8. Create an AI program using KNN algorithm that is able to predict whether a customer will complete a purchase. In order to do so, you need to complete the implementation of load_data, train_model, and evaluate in shopping.py
+Load data (10 points) This function should accept the CSV filename and return a tuple (evidence, lables) where evidence should be the list of evidence for each data points, and labels should be a list of all of the labels for each data point. - Example of evidence: [0, 0.0, 0, 0.0, 1, 0.0, 0.2, 0.2, 0.0, 0.0, 1, 1, 1, 1, 1, 1, 0] - Example of label: 0 
+Train model (10 points) This function should accept a list of evidence and list of labels, return a nearestneighbour classifier fitted on that training data.
+Evaluate (10 points) This function should accept a list of labels and a list of predictions and return two floating-point values (sensitivity, specificity). You may assume each label will be 1 for positive result or 0 for negative result.
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Tue Apr 27 16:15:37 2021
 
 @author: there
@@ -7,9 +17,9 @@ Created on Tue Apr 27 16:15:37 2021
 credit to Bryan Yu from Harvard University
 """
 
+import pandas as pd
 import csv
 import sys
-
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -25,7 +35,7 @@ def main():
     # Load data from spreadsheet and split into train and test sets
     evidence, labels = load_data(sys.argv[1])
     X_train, X_test, y_train, y_test = train_test_split(
-        evidence, labels, test_size=TEST_SIZE, random_state=10
+        evidence, labels, test_size=TEST_SIZE
     )
 
     # Train model and make predictions
@@ -69,7 +79,7 @@ def load_data(filename):
     is 1 if Revenue is true, and 0 otherwise.
     """
     monthReference = {'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'June': 5, 'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9,
-                  'Nov': 10, 'Dec': 11}
+                      'Nov': 10, 'Dec': 11}
     visitorReference = {'Returning_Visitor': 1, 'New_Visitor': 0}
     weekendReference = {'TRUE': 1, 'FALSE': 0}
     revenueReference = {'TRUE': 1, 'FALSE': 0}
@@ -78,17 +88,17 @@ def load_data(filename):
     labels = []
 
     with open(filename, 'r') as f:
-      reader = csv.reader(f)
-      next(reader)
-      for row in reader:
-        rowData = []
-        rowData.extend(float(a) for a in row[0:10])
-        rowData.append(monthReference.get(row[10]))
-        rowData.extend(float(a) for a in row[11:15])
-        rowData.append(visitorReference.get(row[15], 0))
-        rowData.append(weekendReference.get(row[16]))
-        evidence.append(rowData)
-        labels.append(revenueReference.get(row[17]))
+        reader = csv.reader(f)
+        next(reader)
+        for row in reader:
+            rowData = []
+            rowData.extend(float(a) for a in row[0:10])
+            rowData.append(monthReference.get(row[10]))
+            rowData.extend(float(a) for a in row[11:15])
+            rowData.append(visitorReference.get(row[15], 0))
+            rowData.append(weekendReference.get(row[16]))
+            evidence.append(rowData)
+            labels.append(revenueReference.get(row[17]))
 
     return (evidence, labels)
 
@@ -124,14 +134,14 @@ def evaluate(labels, predictions):
     TP = 0
     FN = 0
     for i in range(len(labels)):
-      if labels[i] == 0 and predictions[i] == 1:
-        FP += 1
-      elif labels[i] == 0 and predictions[i] == 0:
-        TN += 1
-      elif labels[i] == 1 and predictions[i] == 1:
-        TP += 1
-      else:
-        FN += 1
+        if labels[i] == 0 and predictions[i] == 1:
+            FP += 1
+        elif labels[i] == 0 and predictions[i] == 0:
+            TN += 1
+        elif labels[i] == 1 and predictions[i] == 1:
+            TP += 1
+        else:
+            FN += 1
 
     sensitivity = TP/(TP+FN)
     specificity = TN/(TN+FP)
@@ -141,3 +151,48 @@ def evaluate(labels, predictions):
 
 if __name__ == "__main__":
     main()
+
+evidence, labels = load_data('shopping.csv')
+evidence[0]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    evidence, labels, test_size=TEST_SIZE
+)
+
+# Train model and make predictions
+model = train_model(X_train, y_train)
+predictions = model.predict(X_test)
+
+labels[0]
+
+"""Given a list of labels vs predictions:
+
+
+1. TN: ? (labels = 0, predictions = 0)
+2. TP: ? (labels = 1. predictions = 1)
+3. FP: ? (labels = 0. predictions = 1)
+4. FN: ? (labels = 1, predictions = 0)
+"""
+
+truevalue = [1, 0, 0, 1, 0]
+predictions = [0, 0, 0, 0, 1]
+
+TN = 0
+TP = 0
+FP = 0
+FN = 0
+
+for i in range(len(truevalue)):
+    if truevalue[i] == 0 and predictions[i] == 1:
+        FP += 1
+    elif truevalue[i] == 0 and predictions[i] == 0:
+        TN += 1
+    elif truevalue[i] == 1 and predictions[i] == 1:
+        TP += 1
+    else:
+        FN += 1
+
+FP
+
+shopping = pd.read_csv('shopping.csv')
+shopping
